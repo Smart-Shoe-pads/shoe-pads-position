@@ -65,6 +65,7 @@
   // 添加定位事件
   locationControl.addEventListener("locationSuccess", function (e) {
     var address = '';
+    console.log(e)
     address += e.addressComponent.province;
     address += e.addressComponent.city;
     address += e.addressComponent.district;
