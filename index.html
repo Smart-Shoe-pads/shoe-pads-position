@@ -25,7 +25,7 @@
       font-family: "微软雅黑";
     }
   </style>
-  <script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&ak=KQMfvONCtDnFbREBKbg7Aip5rqMAXpbb"></script>
+  <script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=KQMfvONCtDnFbREBKbg7Aip5rqMAXpbb"></script>
 </head>
 
 <body>
@@ -42,7 +42,11 @@
 
   //地图初始化
   var bm = new BMapGL.Map("allmap");
-  bm.addControl(new BMapGL.NavigationControl());
+  bm.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+  var scaleCtrl = new BMapGL.ScaleControl();  // 添加比例尺控件
+  bm.addControl(scaleCtrl);
+  var zoomCtrl = new BMapGL.ZoomControl();  // 添加比例尺控件
+  bm.addControl(zoomCtrl);
 
   //坐标转换完之后的回调函数
   translateCallback = function (data) {
