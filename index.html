@@ -81,13 +81,25 @@
 
   var routing = function () {
     if (current && target) {
-      var driving = new BMapGL.DrivingRoute(map, {
+      var output = "赶往被监护人当前位置驾车需要";
+      var searchComplete = function (results) {
+        if (transit.getStatus() != BMAP_STATUS_SUCCESS) {
+          return;
+        }
+        var plan = results.getPlan(0);
+        output += plan.getDuration(true) + "\n"; //获取时间
+        output += "总路程为：";
+        output += plan.getDistance(true) + "\n"; //获取距离
+        alert(output)
+      }
+      var transit = new BMapGL.DrivingRoute(map, {
         renderOptions: {
           map: map,
           autoViewport: true
-        }
+        },
+        onSearchComplete: searchComplete
       });
-      driving.search(currentPoint, targetPoint);
+      transit.search(currentPoint, targetPoint);
     }
   }
 
