@@ -36,8 +36,9 @@
 <script type="text/javascript">
   // 百度地图API功能
   //GPS坐标
-  var x = 116.32715863448607;
-  var y = 39.990912172420714;
+  var position = location.search.substring(1).split("&")
+  var x = Number(position[0].split('=')[1]);
+  var y = Number(position[1].split('=')[1]);
   var ggPoint = new BMapGL.Point(x, y);
 
   //地图初始化
@@ -54,7 +55,7 @@
       bm.centerAndZoom(data.points[0], 21);
       var marker = new BMapGL.Marker(data.points[0]);
       bm.addOverlay(marker);
-      var label = new BMapGL.Label("转换后的百度坐标（正确）", {
+      var label = new BMapGL.Label("当前位置", {
         offset: new BMapGL.Size(20, -10)
       });
       marker.setLabel(label); //添加百度label
