@@ -51,6 +51,9 @@
   map.addControl(zoomCtrl);
   var navi3DCtrl = new BMapGL.NavigationControl3D(); // 添加3D控件
   map.addControl(navi3DCtrl);
+  var currentPoint, targetPoint
+  var current = false
+  var target = false
 
   // 创建定位控件
   var locationControl = new BMapGL.LocationControl({
@@ -76,6 +79,18 @@
     alert(e.message);
   });
 
+  var routing = function () {
+    if (current && target) {
+      var driving = new BMapGL.DrivingRoute(map, {
+        renderOptions: {
+          map: map,
+          autoViewport: true
+        }
+      });
+      driving.search(currentPoint, targetPoint);
+    }
+  }
+
   //坐标转换完之后的回调函数
   translateCallback = function (data) {
     if (data.status === 0) {
@@ -87,13 +102,9 @@
       });
       marker.setLabel(label); //添加百度label
       map.setCenter(data.points[0]);
-      var driving = new BMapGL.DrivingRoute(map, {
-        renderOptions: {
-          map: map,
-          autoViewport: true
-        }
-      });
-      driving.search(data.points[0], data.points[1]);
+      targetPoint = data.points[0]
+      target = true
+      routing()
     }
   }
 
@@ -107,8 +118,9 @@
       var mk = new BMapGL.Marker(r.point);
       map.addOverlay(mk);
       map.panTo(r.point);
-      var currentPoint = new BMapGL.Point(r.point.lng, r.point.lat);
-      pointArr.push(currentPoint);
+      currentPoint = r.point
+      current = true
+      routing()
     } else {
       alert('failed' + this.getStatus());
     }
