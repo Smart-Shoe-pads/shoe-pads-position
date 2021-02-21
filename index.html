@@ -25,7 +25,7 @@
       font-family: "微软雅黑";
     }
   </style>
-  <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=KQMfvONCtDnFbREBKbg7Aip5rqMAXpbb"></script>
+  <script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&ak=KQMfvONCtDnFbREBKbg7Aip5rqMAXpbb"></script>
 </head>
 
 <body>
@@ -38,35 +38,27 @@
   //GPS坐标
   var x = 116.32715863448607;
   var y = 39.990912172420714;
-  var ggPoint = new BMap.Point(x, y);
+  var ggPoint = new BMapGL.Point(x, y);
 
   //地图初始化
-  var bm = new BMap.Map("allmap");
-  bm.centerAndZoom(ggPoint, 21);
-  bm.addControl(new BMap.NavigationControl());
-
-  //添加gps marker和label
-  var markergg = new BMap.Marker(ggPoint);
-  bm.addOverlay(markergg); //添加GPS marker
-  var labelgg = new BMap.Label("未转换的GPS坐标（错误）", {
-    offset: new BMap.Size(20, -10)
-  });
-  markergg.setLabel(labelgg); //添加GPS label
+  var bm = new BMapGL.Map("allmap");
+  bm.addControl(new BMapGL.NavigationControl());
 
   //坐标转换完之后的回调函数
   translateCallback = function (data) {
     if (data.status === 0) {
-      var marker = new BMap.Marker(data.points[0]);
+      bm.centerAndZoom(data.points[0], 21);
+      var marker = new BMapGL.Marker(data.points[0]);
       bm.addOverlay(marker);
-      var label = new BMap.Label("转换后的百度坐标（正确）", {
-        offset: new BMap.Size(20, -10)
+      var label = new BMapGL.Label("转换后的百度坐标（正确）", {
+        offset: new BMapGL.Size(20, -10)
       });
       marker.setLabel(label); //添加百度label
       bm.setCenter(data.points[0]);
     }
   }
   
-  var convertor = new BMap.Convertor();
+  var convertor = new BMapGL.Convertor();
   var pointArr = [];
   pointArr.push(ggPoint);
   convertor.translate(pointArr, 1, 5, translateCallback)
